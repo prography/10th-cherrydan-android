@@ -34,8 +34,6 @@ dependencies {
     // Crypto
     implementation(libs.androidx.security.crypto.ktx)
 
-    api(libs.core)
-
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -51,6 +49,11 @@ dependencies {
 
     // Timber
     implementation(libs.timber)
+
+    // Google Play Services
+    api(libs.play.app.update)
+    api(libs.play.feature.delivery)
+    api(libs.play.review)
 
     implementation(projects.core.presentation.designsystem)
     implementation(projects.core.presentation.ui)
