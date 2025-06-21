@@ -12,8 +12,8 @@ fun DataError.asUiText(): UiText {
             R.string.error_request_timeout
         )
 
-        DataError.Network.TOO_MANY_REQUEST -> UiText.StringResource(
-            R.string.error_too_many_request
+        DataError.Network.TOO_MANY_REQUESTS -> UiText.StringResource(
+            R.string.error_too_many_requests
         )
 
         DataError.Network.NO_INTERNET -> UiText.StringResource(
@@ -21,7 +21,7 @@ fun DataError.asUiText(): UiText {
         )
 
         DataError.Network.PAYLOAD_TOO_LARGE -> UiText.StringResource(
-            R.string.payload_too_large
+            R.string.error_payload_too_large
         )
 
         DataError.Network.SERVER_ERROR -> UiText.StringResource(
