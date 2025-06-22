@@ -6,12 +6,16 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.hyunjung.cherrydan.ui.theme.CherrydanTheme
+import com.hyunjung.core.presentation.designsystem.CalendarIcon
+import com.hyunjung.core.presentation.designsystem.CherrydanColors
+import com.hyunjung.core.presentation.designsystem.CherrydanTheme
+import com.hyunjung.core.presentation.designsystem.CherrydanTypography
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,7 +38,14 @@ class MainActivity : ComponentActivity() {
 fun Greeting(name: String, modifier: Modifier = Modifier) {
     Text(
         text = "Hello $name!",
-        modifier = modifier
+        modifier = modifier,
+        color = CherrydanColors.MainPink3,
+        style = CherrydanTypography.Title1
+    )
+    Icon(
+        imageVector = CalendarIcon,
+        modifier = modifier,
+        contentDescription = null
     )
 }
 
