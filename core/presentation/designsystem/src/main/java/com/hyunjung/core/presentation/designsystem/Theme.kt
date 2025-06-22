@@ -11,6 +11,16 @@ import androidx.core.view.WindowCompat
 val LocalCherrydanColors = staticCompositionLocalOf { CherrydanColors }
 val LocalCherrydanTypography = staticCompositionLocalOf { CherrydanTypography }
 
+object CherrydanTheme {
+    val colors: CherrydanColors
+        @Composable
+        get() = LocalCherrydanColors.current
+
+    val typography: CherrydanTypography
+        @Composable
+        get() = LocalCherrydanTypography.current
+}
+
 @Composable
 fun CherrydanTheme(
     content: @Composable () -> Unit
