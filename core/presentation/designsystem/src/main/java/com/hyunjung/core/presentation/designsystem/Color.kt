@@ -20,4 +20,8 @@ object CherrydanColors {
     // Point Color
     val PointBlue = Color(0xFFB6E5FF)
     val PointBeige = Color(0xFFF9F3E9)
+
+    // LogIn Color
+    val KakaoYellow = Color(0xFFFEE500)
+    val NaverGreen = Color(0xFF30B404)
 }
