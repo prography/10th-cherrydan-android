@@ -39,3 +39,11 @@ val ShareIcon: ImageVector
 val HamburgerIcon: ImageVector
     @Composable
     get() = ImageVector.vectorResource(id = R.drawable.ic_hamburger)
+
+val KakaoIcon: ImageVector
+    @Composable
+    get() = ImageVector.vectorResource(id = R.drawable.ic_kakao)
+
+val NaverIcon: ImageVector
+    @Composable
+    get() = ImageVector.vectorResource(id = R.drawable.ic_naver)
