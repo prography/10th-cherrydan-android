@@ -103,7 +103,7 @@ fun CherrydanLogInButton(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 17.dp),
+                .padding(vertical = 10.dp),
             contentAlignment = Alignment.Center
         ) {
             CircularProgressIndicator(
@@ -152,7 +152,7 @@ fun CherrydanLogInOutlinedButton(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 17.dp),
+                .padding(vertical = 10.dp),
             contentAlignment = Alignment.Center
         ) {
             CircularProgressIndicator(
@@ -161,14 +161,18 @@ fun CherrydanLogInOutlinedButton(
                     .alpha(if (isLoading) 1f else 0f),
                 strokeWidth = 1.5.dp
             )
-            Image(
-                painter = painterResource(id = R.drawable.img_google),
-                contentDescription = null,
+            Box(
                 modifier = Modifier
                     .align(Alignment.CenterStart)
                     .alpha(if (isLoading) 0f else 1f)
-                    .padding(start = 12.dp),
-            )
+                    .padding(start = 12.dp)
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.img_google),
+                    contentDescription = null,
+                    modifier = Modifier.size(28.dp)
+                )
+            }
             Text(
                 text = text,
                 modifier = Modifier
