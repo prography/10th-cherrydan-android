@@ -34,6 +34,8 @@ dependencies {
     // Crypto
     implementation(libs.androidx.security.crypto.ktx)
 
+    implementation(libs.bundles.koin)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
