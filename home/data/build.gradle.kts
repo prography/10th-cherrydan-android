@@ -4,13 +4,13 @@ plugins {
 }
 
 android {
-    namespace = "com.hyunjung.auth.data"
+    namespace = "com.hyunjung.home.data"
 }
 
 dependencies {
     implementation(libs.bundles.koin)
 
-    implementation(projects.auth.domain)
+    implementation(projects.home.domain)
     implementation(projects.core.domain)
     implementation(projects.core.data)
 }

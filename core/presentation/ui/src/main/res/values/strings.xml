@@ -18,4 +18,12 @@
     <string name="login_kakao">카카오로 로그인</string>
     <string name="login_naver">네이버로 로그인</string>
     <string name="login_google">Google로 로그인</string>
+
+    <!-- Home Screen -->
+    <string name="home_app_name">체리단</string>
+    <string name="home_nav_category">카테고리</string>
+    <string name="home_nav_notice">체리단 소식</string>
+    <string name="home_nav_home">홈</string>
+    <string name="home_nav_my_campaigns">내 체험단</string>
+    <string name="home_nav_my_page">마이페이지</string>
 </resources>
