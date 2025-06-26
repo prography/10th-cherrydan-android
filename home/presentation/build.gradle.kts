@@ -7,6 +7,8 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.navigation.compose)
+
     implementation(projects.core.domain)
     implementation(projects.home.domain)
 }
