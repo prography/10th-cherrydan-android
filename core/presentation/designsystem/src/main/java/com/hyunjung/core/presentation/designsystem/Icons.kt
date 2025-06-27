@@ -28,6 +28,10 @@ val NotificationIcon: ImageVector
     @Composable
     get() = ImageVector.vectorResource(id = R.drawable.ic_notification)
 
+val SearchIcon: ImageVector
+    @Composable
+    get() = ImageVector.vectorResource(id = R.drawable.ic_search)
+
 val TrashIcon: ImageVector
     @Composable
     get() = ImageVector.vectorResource(id = R.drawable.ic_trash)
@@ -87,3 +91,11 @@ val NavMyCampaignsSelectedIcon: ImageVector
 val NavMyPageSelectedIcon: ImageVector
     @Composable
     get() = ImageVector.vectorResource(id = R.drawable.ic_nav_my_page)
+
+val CherryUnselectedIcon: ImageVector
+    @Composable
+    get() = ImageVector.vectorResource(id = R.drawable.ic_cherry_unselected)
+
+val CherrySelectedIcon: ImageVector
+    @Composable
+    get() = ImageVector.vectorResource(id = R.drawable.ic_cherry_selected)
