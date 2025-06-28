@@ -11,23 +11,18 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -35,16 +30,13 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.hyunjung.notification.presentation.component.AlertType
-import com.hyunjung.auth.presentation.LocalCherrydanContentColor
-import com.hyunjung.notification.presentation.component.NotificationActiveToggleItem
-import com.hyunjung.notification.presentation.component.NotificationToggleItem
+import com.hyunjung.auth.presentation.AlertType
+import com.hyunjung.auth.presentation.NotificationActiveToggleItem
+import com.hyunjung.auth.presentation.NotificationToggleItem
 import com.hyunjung.core.presentation.designsystem.BackIcon
 import com.hyunjung.core.presentation.designsystem.CherrydanColors
 import com.hyunjung.core.presentation.designsystem.CherrydanTheme
 import com.hyunjung.core.presentation.designsystem.CherrydanTypography
-import com.hyunjung.core.presentation.designsystem.CircleUnselectedIcon
 import com.hyunjung.core.presentation.designsystem.TrashIcon
 import com.hyunjung.core.presentation.designsystem.component.CherrydanFixedTabRow
 import com.hyunjung.core.presentation.designsystem.component.CherrydanTab
@@ -57,8 +49,11 @@ fun NotificationScreen(
     onDeletePressed: () -> Unit = {}
 ) {
     var selectedTabIndex by remember { mutableIntStateOf(0) }
-    val notificationItems = remember { getSampleNotifications() }
+    var notificationItems by remember { mutableStateOf(getSampleNotifications()) }
     val isInPreview = LocalInspectionMode.current
+
+    val allSelected = notificationItems.all { it.isSelected }
+    val hasAnySelected = notificationItems.any { it.isSelected }
 
     Column(
         modifier = Modifier
@@ -90,14 +85,14 @@ fun NotificationScreen(
                     TopBarIconButton(
                         imageVector = BackIcon,
                         contentDescription = "Back",
-                        onClick = {}
+                        onClick = onBackPressed
                     )
                 },
                 actions = {
                     TopBarIconButton(
                         imageVector = TrashIcon,
                         contentDescription = "Delete",
-                        onClick = {}
+                        onClick = onDeletePressed
                     )
                 }
             )
@@ -145,46 +140,50 @@ fun NotificationScreen(
                     }
                 }
             }
-            HorizontalDivider(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.BottomCenter),
-                color = CherrydanColors.PointBeige
-            )
         }
 
         Spacer(modifier = Modifier.height(20.dp))
 
+        // 모두선택 / 읽음 처리 행
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(32.dp)
                 .padding(horizontal = 16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(
-                imageVector = CircleUnselectedIcon,
-                contentDescription = "All Select",
-                tint = LocalCherrydanContentColor.current,
-                modifier = Modifier
-                    .size(24.dp)
-            )
+            NotificationToggleItem(
+                selected = allSelected,
+                showBadge = false,
+                onClick = {
+                    // 모두선택 토글 로직
+                    notificationItems = notificationItems.map { item ->
+                        item.copy(isSelected = !allSelected)
+                    }
+                },
+                showDivider = false,
+                paddingValues = PaddingValues(0.dp)
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(32.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        text = if (isInPreview) "모든 선택" else stringResource(id = com.hyunjung.core.presentation.ui.R.string.notification_all_select),
+                        style = CherrydanTypography.Main4_R,
+                        color = CherrydanColors.Black
+                    )
 
-            Spacer(modifier = Modifier.width(2.dp))
-
-            Text(
-                text = stringResource(id = com.hyunjung.core.presentation.ui.R.string.notification_all_select),
-                style = CherrydanTypography.Main4_R,
-                color = CherrydanColors.Black,
-                modifier = Modifier.weight(1f)
-            )
-
-            Text(
-                text = stringResource(id = com.hyunjung.core.presentation.ui.R.string.notification_read),
-                style = CherrydanTypography.Main4_R,
-                color = CherrydanColors.Black
-            )
+                    Text(
+                        text = if (isInPreview) "읽음" else stringResource(id = com.hyunjung.core.presentation.ui.R.string.notification_read),
+                        style = CherrydanTypography.Main4_R,
+                        color = CherrydanColors.Black
+                    )
+                }
+            }
         }
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -196,28 +195,46 @@ fun NotificationScreen(
                 .padding(horizontal = 16.dp),
             verticalArrangement = Arrangement.spacedBy(0.dp)
         ) {
-            items(notificationItems) { item ->
+            itemsIndexed(notificationItems) { index, item ->
                 if (selectedTabIndex == 0) { // 활동 탭
-                    // NotificationActiveToggleItem 사용
                     val annotatedContent = createAnnotatedString(item.content)
 
                     NotificationActiveToggleItem(
                         alertType = AlertType.VISITED,
                         content = annotatedContent,
                         time = System.currentTimeMillis(),
-                        selected = !item.isRead,
+                        selected = item.isSelected,
                         showBadge = item.hasHighPriority,
-                        onClick = { /* TODO: 알림 클릭 시 동작 */ },
-                        showDivider = item.id != (notificationItems.lastOrNull()?.id ?: 0),
+                        onClick = {
+                            // 개별 아이템 선택 토글
+                            notificationItems =
+                                notificationItems.mapIndexed { idx, notificationItem ->
+                                    if (idx == index) {
+                                        notificationItem.copy(isSelected = !notificationItem.isSelected)
+                                    } else {
+                                        notificationItem
+                                    }
+                                }
+                        },
+                        showDivider = index != notificationItems.lastIndex,
                         modifier = Modifier.padding(vertical = 4.dp)
                     )
                 } else { // 맞춤형 탭
-                    // 일반 NotificationToggleItem 사용
                     NotificationToggleItem(
-                        selected = !item.isRead,
+                        selected = item.isSelected,
                         showBadge = item.hasHighPriority,
-                        onClick = { /* TODO: 알림 클릭 시 동작 */ },
-                        showDivider = item.id != (notificationItems.lastOrNull()?.id ?: 0),
+                        onClick = {
+                            // 개별 아이템 선택 토글
+                            notificationItems =
+                                notificationItems.mapIndexed { idx, notificationItem ->
+                                    if (idx == index) {
+                                        notificationItem.copy(isSelected = !notificationItem.isSelected)
+                                    } else {
+                                        notificationItem
+                                    }
+                                }
+                        },
+                        showDivider = index != notificationItems.lastIndex,
                         paddingValues = PaddingValues(vertical = 8.dp)
                     ) {
                         Column(
@@ -267,89 +284,12 @@ private fun createAnnotatedString(content: String) = buildAnnotatedString {
     }
 }
 
-@Composable
-private fun NotificationItemProduction(
-    item: NotificationItemData,
-    modifier: Modifier = Modifier
-) {
-    val isInPreview = LocalInspectionMode.current
-
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(vertical = 16.dp),
-    ) {
-        // 알림 내용
-        Column(
-            modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(4.dp)
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.Top
-            ) {
-                Text(
-                    text = item.title,
-                    fontSize = 16.sp,
-                    fontWeight = if (item.isRead) FontWeight.Normal else FontWeight.Medium,
-                    color = Color.Black
-                )
-
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(4.dp)
-                ) {
-                    if (item.hasHighPriority) {
-                        Box(
-                            modifier = Modifier
-                                .size(6.dp)
-                                .clip(CircleShape)
-                                .background(CherrydanColors.MainPink3)
-                        )
-                    }
-                    Text(
-                        text = if (isInPreview) "읽음" else "읽음", // 프리뷰에서는 하드코딩
-                        fontSize = 12.sp,
-                        color = Color(0xFF9E9E9E)
-                    )
-                }
-            }
-
-            if (item.content.isNotEmpty()) {
-                Text(
-                    text = item.content,
-                    fontSize = 14.sp,
-                    color = Color(0xFF757575),
-                    lineHeight = 20.sp
-                )
-            }
-
-            if (item.date.isNotEmpty()) {
-                Text(
-                    text = item.date,
-                    fontSize = 12.sp,
-                    color = Color(0xFFBDBDBD)
-                )
-            }
-        }
-    }
-
-    // 구분선
-    if (item.id != 5) {
-        HorizontalDivider(
-            modifier = Modifier.padding(start = 36.dp),
-            color = Color(0xFFF5F5F5),
-            thickness = 1.dp
-        )
-    }
-}
-
 data class NotificationItemData(
     val id: Int,
     val title: String,
     val content: String,
     val date: String,
+    val isSelected: Boolean = false,
     val isRead: Boolean = false,
     val hasHighPriority: Boolean = false
 )
