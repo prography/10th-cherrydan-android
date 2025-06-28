@@ -108,7 +108,12 @@ fun NotificationScreen(
                 .fillMaxWidth()
                 .background(color = CherrydanColors.White)
         ) {
-
+            HorizontalDivider(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.BottomCenter),
+                color = CherrydanColors.PointBeige
+            )
             CherrydanFixedTabRow(
                 selectedTabIndex = selectedTabIndex
             ) {
