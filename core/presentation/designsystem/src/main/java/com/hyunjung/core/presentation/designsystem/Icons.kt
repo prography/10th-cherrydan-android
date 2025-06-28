@@ -12,6 +12,10 @@ val ArrowRightIcon: ImageVector
     @Composable
     get() = ImageVector.vectorResource(id = R.drawable.ic_arrow_right)
 
+val ArrowDownIcon: ImageVector
+    @Composable
+    get() = ImageVector.vectorResource(id = R.drawable.ic_arrow_down)
+
 val CalendarIcon: ImageVector
     @Composable
     get() = ImageVector.vectorResource(id = R.drawable.ic_calendar)
@@ -35,6 +39,10 @@ val ClockIcon: ImageVector
 val NotificationIcon: ImageVector
     @Composable
     get() = ImageVector.vectorResource(id = R.drawable.ic_notification)
+
+val NotificationSmallIcon: ImageVector
+    @Composable
+    get() = ImageVector.vectorResource(id = R.drawable.ic_notification_small)
 
 val SearchIcon: ImageVector
     @Composable
@@ -119,3 +127,11 @@ val CircleUnselectedIcon: ImageVector
 val CircleCheckedIcon: ImageVector
     @Composable
     get() = ImageVector.vectorResource(id = R.drawable.ic_circle_checked)
+
+val SearchCancelIcon: ImageVector
+    @Composable
+    get() = ImageVector.vectorResource(id = R.drawable.ic_search_cancel)
+
+val CloseIcon: ImageVector
+    @Composable
+    get() = ImageVector.vectorResource(id = R.drawable.ic_close)
