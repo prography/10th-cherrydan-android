@@ -35,4 +35,15 @@
     <string name="notification_read">읽음</string>
     <string name="notification_delete">삭제</string>
     <string name="notification_cancel">취소</string>
+
+    <!-- Search Screen -->
+    <string name="search_placeholder">검색어를 입력해 주세요</string>
+    <string name="search_cancel">닫기</string>
+    <string name="search_latest">최근 검색</string>
+    <string name="search_all_delete">전체 삭제</string>
+    <string name="search_label_region">지역</string>
+    <string name="search_label_product">제품</string>
+    <string name="search_toast_keyword">키워드 알림을 추가했어요.</string>
+    <string name="search_toast_cannot_keyword_1">키워드 알림을 더이상 추가할 수 없어요.</string>
+    <string name="search_toast_cannot_keyword_2">(마이페이지 > 내 정보 > 키워드 알림)에서 확인해 주세요.</string>
 </resources>
