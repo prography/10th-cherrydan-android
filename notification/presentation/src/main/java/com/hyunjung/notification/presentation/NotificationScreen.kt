@@ -36,10 +36,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.hyunjung.auth.presentation.AlertType
+import com.hyunjung.notification.presentation.component.AlertType
 import com.hyunjung.auth.presentation.LocalCherrydanContentColor
-import com.hyunjung.auth.presentation.NotificationActiveToggleItem
-import com.hyunjung.auth.presentation.NotificationToggleItem
+import com.hyunjung.notification.presentation.component.NotificationActiveToggleItem
+import com.hyunjung.notification.presentation.component.NotificationToggleItem
 import com.hyunjung.core.presentation.designsystem.BackIcon
 import com.hyunjung.core.presentation.designsystem.CherrydanColors
 import com.hyunjung.core.presentation.designsystem.CherrydanTheme

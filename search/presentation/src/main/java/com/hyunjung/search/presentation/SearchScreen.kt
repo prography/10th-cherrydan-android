@@ -1,4 +1,4 @@
-package com.hyunjung.auth.presentation
+package com.hyunjung.search.presentation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
