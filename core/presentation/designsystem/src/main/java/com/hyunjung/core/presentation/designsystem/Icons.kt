@@ -4,6 +4,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 
+val BackIcon: ImageVector
+    @Composable
+    get() = ImageVector.vectorResource(id = R.drawable.ic_back)
+
+val ArrowRightIcon: ImageVector
+    @Composable
+    get() = ImageVector.vectorResource(id = R.drawable.ic_arrow_right)
+
 val CalendarIcon: ImageVector
     @Composable
     get() = ImageVector.vectorResource(id = R.drawable.ic_calendar)
@@ -99,3 +107,15 @@ val CherryUnselectedIcon: ImageVector
 val CherrySelectedIcon: ImageVector
     @Composable
     get() = ImageVector.vectorResource(id = R.drawable.ic_cherry_selected)
+
+val CircleSelectedIcon: ImageVector
+    @Composable
+    get() = ImageVector.vectorResource(id = R.drawable.ic_circle_selected)
+
+val CircleUnselectedIcon: ImageVector
+    @Composable
+    get() = ImageVector.vectorResource(id = R.drawable.ic_circle_unselected)
+
+val CircleCheckedIcon: ImageVector
+    @Composable
+    get() = ImageVector.vectorResource(id = R.drawable.ic_circle_checked)

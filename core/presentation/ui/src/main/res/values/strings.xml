@@ -26,4 +26,13 @@
     <string name="home_nav_home">홈</string>
     <string name="home_nav_my_campaigns">내 체험단</string>
     <string name="home_nav_my_page">마이페이지</string>
+
+    <!-- Notification Screen -->
+    <string name="notification_title">알림</string>
+    <string name="notification_activity">활동</string>
+    <string name="notification_keyword">맞춤형</string>
+    <string name="notification_all_select">모두 선택</string>
+    <string name="notification_read">읽음</string>
+    <string name="notification_delete">삭제</string>
+    <string name="notification_cancel">취소</string>
 </resources>
