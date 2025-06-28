@@ -26,6 +26,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -46,6 +47,7 @@ import com.hyunjung.core.presentation.designsystem.component.CherrydanTab
 import com.hyunjung.core.presentation.designsystem.component.CherrydanTabPosition
 import com.hyunjung.core.presentation.designsystem.component.CherrydanTopAppBar
 import com.hyunjung.core.presentation.designsystem.component.TopBarIconButton
+import com.hyunjung.core.presentation.ui.R
 
 @Composable
 fun HomeScreenRoot(modifier: Modifier = Modifier) {
@@ -87,8 +89,7 @@ fun HomeContent(
         modifier = modifier,
         topBar = {
             CherrydanTopAppBar(
-                // todo : StringResource를 사용하여 문자열을 관리하는 것이 좋습니다.
-                title = "체리단",
+                title = stringResource(id = R.string.splash_title),
                 actions = {
                     TopBarIconButton(
                         imageVector = NotificationIcon,
