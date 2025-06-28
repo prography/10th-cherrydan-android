@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.hyunjung.auth.presentation.LocalCherrydanContentColor
+import com.hyunjung.core.presentation.designsystem.BackIcon
 import com.hyunjung.core.presentation.designsystem.CherrydanColors
 import com.hyunjung.core.presentation.designsystem.CherrydanTypography
 
@@ -100,7 +101,7 @@ private fun TopAppBarBase(
                 .align(if (centeredTitle) Alignment.Center else Alignment.CenterStart)
                 .padding(
                     start = if (!centeredTitle && navigationIcon != null) {
-                        CherrydanTopAppBarDefaults.HorizontalPadding + CherrydanTopAppBarDefaults.NavigationButtonSize
+                        CherrydanTopAppBarDefaults.NavigationButtonSize
                     } else 0.dp
                 )
         ) {
@@ -194,7 +195,7 @@ private fun CherrydanTopAppBarPreview() {
             title = "Title",
             navigationIcon = {
                 TopBarIconButton(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    imageVector = BackIcon,
                     contentDescription = "Back",
                     onClick = {}
                 )
@@ -219,7 +220,7 @@ private fun CherrydanTopAppBarCenteredPreview() {
             centeredTitle = true,
             navigationIcon = {
                 TopBarIconButton(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    imageVector = BackIcon,
                     contentDescription = "Back",
                     onClick = {}
                 )

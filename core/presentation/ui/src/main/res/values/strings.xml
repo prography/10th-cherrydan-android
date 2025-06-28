@@ -31,7 +31,7 @@
     <string name="notification_title">알림</string>
     <string name="notification_activity">활동</string>
     <string name="notification_keyword">맞춤형</string>
-    <string name="notification_all_selected">모두 선택</string>
+    <string name="notification_all_select">모두 선택</string>
     <string name="notification_read">읽음</string>
     <string name="notification_delete">삭제</string>
     <string name="notification_cancel">취소</string>
