@@ -186,7 +186,16 @@ fun NotificationScreen(
             Text(
                 text = if (isInPreview) "읽음" else stringResource(id = com.hyunjung.core.presentation.ui.R.string.notification_read),
                 style = CherrydanTypography.Main4_R,
-                color = CherrydanColors.Black
+                color = CherrydanColors.Black,
+                modifier = Modifier.clickable(enabled = hasAnySelected) {
+                    notificationItems = notificationItems.map { item ->
+                        if (item.isSelected) {
+                            item.copy(isRead = true, isSelected = false, hasHighPriority = false)
+                        } else {
+                            item
+                        }
+                    }
+                }
             )
         }
 
