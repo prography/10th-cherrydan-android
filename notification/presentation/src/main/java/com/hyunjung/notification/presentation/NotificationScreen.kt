@@ -80,13 +80,10 @@ fun NotificationScreen(
                     )
                 },
                 actions = {
-                    if (!isDeleteMode) {
-                        TopBarIconButton(
-                            imageVector = TrashIcon,
-                            contentDescription = "Delete",
-                            onClick = { isDeleteMode = true }
-                        )
-                    }
+                    NotificationScreenActions(
+                        isDeleteMode = isDeleteMode,
+                        onDeleteModeToggle = { isDeleteMode = !isDeleteMode }
+                    )
                 }
             )
         } else {
@@ -333,6 +330,20 @@ fun NotificationScreen(
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun NotificationScreenActions(
+    isDeleteMode: Boolean,
+    onDeleteModeToggle: () -> Unit
+) {
+    if (!isDeleteMode) {
+        TopBarIconButton(
+            imageVector = TrashIcon,
+            contentDescription = "Delete",
+            onClick = onDeleteModeToggle
+        )
     }
 }
 
