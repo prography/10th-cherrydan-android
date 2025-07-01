@@ -1,6 +1,7 @@
 package com.hyunjung.notification.presentation
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,19 +15,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
@@ -36,29 +36,43 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.hyunjung.notification.presentation.component.AlertType
-import com.hyunjung.auth.presentation.LocalCherrydanContentColor
-import com.hyunjung.notification.presentation.component.NotificationActiveToggleItem
-import com.hyunjung.notification.presentation.component.NotificationToggleItem
 import com.hyunjung.core.presentation.designsystem.BackIcon
 import com.hyunjung.core.presentation.designsystem.CherrydanColors
 import com.hyunjung.core.presentation.designsystem.CherrydanTheme
 import com.hyunjung.core.presentation.designsystem.CherrydanTypography
+import com.hyunjung.core.presentation.designsystem.CircleSelectedIcon
 import com.hyunjung.core.presentation.designsystem.CircleUnselectedIcon
 import com.hyunjung.core.presentation.designsystem.TrashIcon
 import com.hyunjung.core.presentation.designsystem.component.CherrydanFixedTabRow
 import com.hyunjung.core.presentation.designsystem.component.CherrydanTab
 import com.hyunjung.core.presentation.designsystem.component.CherrydanTopAppBar
 import com.hyunjung.core.presentation.designsystem.component.TopBarIconButton
+import com.hyunjung.notification.presentation.component.AlertType
+import com.hyunjung.notification.presentation.component.NotificationActiveToggleItem
+import com.hyunjung.notification.presentation.component.NotificationToggleItem
 
 @Composable
 fun NotificationScreen(
     onBackPressed: () -> Unit = {},
-    onDeletePressed: () -> Unit = {}
+    onDeletePressed: (deletedItems: List<NotificationItemData>) -> Unit = {}
 ) {
     var selectedTabIndex by remember { mutableIntStateOf(0) }
-    val notificationItems = remember { getSampleNotifications() }
+    var notificationItems by remember { mutableStateOf(getSampleNotifications()) }
+    var isDeleteMode by remember { mutableStateOf(false) }
     val isInPreview = LocalInspectionMode.current
+
+    val allSelected = notificationItems.all { it.isSelected }
+    val hasAnySelected = notificationItems.any { it.isSelected }
+
+    val toggleItemSelection: (Int) -> Unit = { index ->
+        notificationItems = notificationItems.mapIndexed { idx, item ->
+            if (idx == index) {
+                item.copy(isSelected = !item.isSelected)
+            } else {
+                item
+            }
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -76,10 +90,9 @@ fun NotificationScreen(
                     )
                 },
                 actions = {
-                    TopBarIconButton(
-                        imageVector = TrashIcon,
-                        contentDescription = "Delete",
-                        onClick = {}
+                    NotificationScreenActions(
+                        isDeleteMode = isDeleteMode,
+                        onDeleteModeToggle = { isDeleteMode = !isDeleteMode }
                     )
                 }
             )
@@ -90,15 +103,17 @@ fun NotificationScreen(
                     TopBarIconButton(
                         imageVector = BackIcon,
                         contentDescription = "Back",
-                        onClick = {}
+                        onClick = onBackPressed
                     )
                 },
                 actions = {
-                    TopBarIconButton(
-                        imageVector = TrashIcon,
-                        contentDescription = "Delete",
-                        onClick = {}
-                    )
+                    if (!isDeleteMode) {
+                        TopBarIconButton(
+                            imageVector = TrashIcon,
+                            contentDescription = "Delete",
+                            onClick = { isDeleteMode = true }
+                        )
+                    }
                 }
             )
         }
@@ -108,7 +123,12 @@ fun NotificationScreen(
                 .fillMaxWidth()
                 .background(color = CherrydanColors.White)
         ) {
-
+            HorizontalDivider(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.BottomCenter),
+                color = CherrydanColors.PointBeige
+            )
             CherrydanFixedTabRow(
                 selectedTabIndex = selectedTabIndex
             ) {
@@ -140,46 +160,105 @@ fun NotificationScreen(
                     }
                 }
             }
-            HorizontalDivider(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.BottomCenter),
-                color = CherrydanColors.PointBeige
-            )
         }
 
         Spacer(modifier = Modifier.height(20.dp))
 
+        // 모두선택 / 읽음처리 또는 삭제 행
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(32.dp)
                 .padding(horizontal = 16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(
-                imageVector = CircleUnselectedIcon,
-                contentDescription = "All Select",
-                tint = LocalCherrydanContentColor.current,
+            Row(
                 modifier = Modifier
-                    .size(24.dp)
-            )
+                    .clickable {
+                        notificationItems = notificationItems.map { item ->
+                            item.copy(isSelected = !allSelected)
+                        }
+                    }
+                    .padding(end = 8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = if (allSelected) CircleSelectedIcon else CircleUnselectedIcon,
+                    tint = Color.Unspecified,
+                    contentDescription = null,
+                    modifier = Modifier.size(24.dp)
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(
+                    text = if (isInPreview) "모두 선택" else stringResource(id = com.hyunjung.core.presentation.ui.R.string.notification_all_select),
+                    style = CherrydanTypography.Main4_R,
+                    color = CherrydanColors.Black
+                )
+            }
+            Spacer(modifier = Modifier.weight(1f))
 
-            Spacer(modifier = Modifier.width(2.dp))
+            if (isDeleteMode) {
+                // 삭제 모드: "삭제 | 취소" 표시
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = if (isInPreview) "삭제" else stringResource(id = com.hyunjung.core.presentation.ui.R.string.notification_delete),
+                        style = CherrydanTypography.Main4_B.copy(fontSize = 14.sp),
+                        color = CherrydanColors.MainPink3,
+                        modifier = Modifier
+                            .clickable(enabled = hasAnySelected) {
+                                // 선택된 항목들을 삭제
+                                val itemsToDelete = notificationItems.filter { it.isSelected }
+                                notificationItems = notificationItems.filter { !it.isSelected }
+                                isDeleteMode = false
+                                onDeletePressed(itemsToDelete)
+                            }
+                            .padding(end = 12.dp)
+                    )
 
-            Text(
-                text = stringResource(id = com.hyunjung.core.presentation.ui.R.string.notification_all_select),
-                style = CherrydanTypography.Main4_R,
-                color = CherrydanColors.Black,
-                modifier = Modifier.weight(1f)
-            )
+                    Text(
+                        text = "|",
+                        style = CherrydanTypography.Main5_R,
+                        color = CherrydanColors.Gray4
+                    )
 
-            Text(
-                text = stringResource(id = com.hyunjung.core.presentation.ui.R.string.notification_read),
-                style = CherrydanTypography.Main4_R,
-                color = CherrydanColors.Black
-            )
+                    Text(
+                        text = if (isInPreview) "취소" else stringResource(id = com.hyunjung.core.presentation.ui.R.string.notification_cancel),
+                        style = CherrydanTypography.Main4_B.copy(fontSize = 14.sp),
+                        color = CherrydanColors.Black,
+                        modifier = Modifier
+                            .clickable {
+                                // 삭제 모드 취소 및 선택 해제
+                                notificationItems =
+                                    notificationItems.map { it.copy(isSelected = false) }
+                                isDeleteMode = false
+                            }
+                            .padding(start = 12.dp)
+                    )
+                }
+            } else {
+                // 일반 모드: "읽음" 표시
+                Text(
+                    text = if (isInPreview) "읽음" else stringResource(id = com.hyunjung.core.presentation.ui.R.string.notification_read),
+                    style = CherrydanTypography.Main4_R,
+                    color = if (hasAnySelected) CherrydanColors.Black else CherrydanColors.Gray4,
+                    modifier = Modifier.clickable(enabled = hasAnySelected) {
+                        // 선택된 항목들을 읽음 처리
+                        notificationItems = notificationItems.map { item ->
+                            if (item.isSelected) {
+                                item.copy(
+                                    isRead = true,
+                                    isSelected = false,
+                                    hasHighPriority = false
+                                )
+                            } else {
+                                item
+                            }
+                        }
+                    }
+                )
+            }
         }
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -191,28 +270,36 @@ fun NotificationScreen(
                 .padding(horizontal = 16.dp),
             verticalArrangement = Arrangement.spacedBy(0.dp)
         ) {
-            items(notificationItems) { item ->
+            itemsIndexed(notificationItems) { index, item ->
                 if (selectedTabIndex == 0) { // 활동 탭
-                    // NotificationActiveToggleItem 사용
                     val annotatedContent = createAnnotatedString(item.content)
 
                     NotificationActiveToggleItem(
                         alertType = AlertType.VISITED,
                         content = annotatedContent,
                         time = System.currentTimeMillis(),
-                        selected = !item.isRead,
+                        selected = item.isSelected,
                         showBadge = item.hasHighPriority,
-                        onClick = { /* TODO: 알림 클릭 시 동작 */ },
-                        showDivider = item.id != (notificationItems.lastOrNull()?.id ?: 0),
+                        onClick = { toggleItemSelection(index) },
+                        showDivider = index != notificationItems.lastIndex,
                         modifier = Modifier.padding(vertical = 4.dp)
                     )
                 } else { // 맞춤형 탭
-                    // 일반 NotificationToggleItem 사용
                     NotificationToggleItem(
-                        selected = !item.isRead,
+                        selected = item.isSelected,
                         showBadge = item.hasHighPriority,
-                        onClick = { /* TODO: 알림 클릭 시 동작 */ },
-                        showDivider = item.id != (notificationItems.lastOrNull()?.id ?: 0),
+                        onClick = {
+                            // 개별 아이템 선택 토글
+                            notificationItems =
+                                notificationItems.mapIndexed { idx, notificationItem ->
+                                    if (idx == index) {
+                                        notificationItem.copy(isSelected = !notificationItem.isSelected)
+                                    } else {
+                                        notificationItem
+                                    }
+                                }
+                        },
+                        showDivider = index != notificationItems.lastIndex,
                         paddingValues = PaddingValues(vertical = 8.dp)
                     ) {
                         Column(
@@ -248,6 +335,20 @@ fun NotificationScreen(
 }
 
 @Composable
+private fun NotificationScreenActions(
+    isDeleteMode: Boolean,
+    onDeleteModeToggle: () -> Unit
+) {
+    if (!isDeleteMode) {
+        TopBarIconButton(
+            imageVector = TrashIcon,
+            contentDescription = "Delete",
+            onClick = onDeleteModeToggle
+        )
+    }
+}
+
+@Composable
 private fun createAnnotatedString(content: String) = buildAnnotatedString {
     append(content)
 
@@ -262,89 +363,12 @@ private fun createAnnotatedString(content: String) = buildAnnotatedString {
     }
 }
 
-@Composable
-private fun NotificationItemProduction(
-    item: NotificationItemData,
-    modifier: Modifier = Modifier
-) {
-    val isInPreview = LocalInspectionMode.current
-
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(vertical = 16.dp),
-    ) {
-        // 알림 내용
-        Column(
-            modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(4.dp)
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.Top
-            ) {
-                Text(
-                    text = item.title,
-                    fontSize = 16.sp,
-                    fontWeight = if (item.isRead) FontWeight.Normal else FontWeight.Medium,
-                    color = Color.Black
-                )
-
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(4.dp)
-                ) {
-                    if (item.hasHighPriority) {
-                        Box(
-                            modifier = Modifier
-                                .size(6.dp)
-                                .clip(CircleShape)
-                                .background(CherrydanColors.MainPink3)
-                        )
-                    }
-                    Text(
-                        text = if (isInPreview) "읽음" else "읽음", // 프리뷰에서는 하드코딩
-                        fontSize = 12.sp,
-                        color = Color(0xFF9E9E9E)
-                    )
-                }
-            }
-
-            if (item.content.isNotEmpty()) {
-                Text(
-                    text = item.content,
-                    fontSize = 14.sp,
-                    color = Color(0xFF757575),
-                    lineHeight = 20.sp
-                )
-            }
-
-            if (item.date.isNotEmpty()) {
-                Text(
-                    text = item.date,
-                    fontSize = 12.sp,
-                    color = Color(0xFFBDBDBD)
-                )
-            }
-        }
-    }
-
-    // 구분선
-    if (item.id != 5) {
-        HorizontalDivider(
-            modifier = Modifier.padding(start = 36.dp),
-            color = Color(0xFFF5F5F5),
-            thickness = 1.dp
-        )
-    }
-}
-
 data class NotificationItemData(
     val id: Int,
     val title: String,
     val content: String,
     val date: String,
+    val isSelected: Boolean = false,
     val isRead: Boolean = false,
     val hasHighPriority: Boolean = false
 )
