@@ -64,6 +64,16 @@ fun NotificationScreen(
     val allSelected = notificationItems.all { it.isSelected }
     val hasAnySelected = notificationItems.any { it.isSelected }
 
+    val toggleItemSelection: (Int) -> Unit = { index ->
+        notificationItems = notificationItems.mapIndexed { idx, item ->
+            if (idx == index) {
+                item.copy(isSelected = !item.isSelected)
+            } else {
+                item
+            }
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -269,17 +279,7 @@ fun NotificationScreen(
                         time = System.currentTimeMillis(),
                         selected = item.isSelected,
                         showBadge = item.hasHighPriority,
-                        onClick = {
-                            // 개별 아이템 선택 토글
-                            notificationItems =
-                                notificationItems.mapIndexed { idx, notificationItem ->
-                                    if (idx == index) {
-                                        notificationItem.copy(isSelected = !notificationItem.isSelected)
-                                    } else {
-                                        notificationItem
-                                    }
-                                }
-                        },
+                        onClick = { toggleItemSelection(index) },
                         showDivider = index != notificationItems.lastIndex,
                         modifier = Modifier.padding(vertical = 4.dp)
                     )
