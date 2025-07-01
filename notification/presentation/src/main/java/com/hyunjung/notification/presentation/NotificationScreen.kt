@@ -35,6 +35,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.hyunjung.core.presentation.designsystem.BackIcon
 import com.hyunjung.core.presentation.designsystem.CherrydanColors
 import com.hyunjung.core.presentation.designsystem.CherrydanTheme
@@ -57,6 +58,7 @@ fun NotificationScreen(
 ) {
     var selectedTabIndex by remember { mutableIntStateOf(0) }
     var notificationItems by remember { mutableStateOf(getSampleNotifications()) }
+    var isDeleteMode by remember { mutableStateOf(false) }
     val isInPreview = LocalInspectionMode.current
 
     val allSelected = notificationItems.all { it.isSelected }
@@ -78,11 +80,13 @@ fun NotificationScreen(
                     )
                 },
                 actions = {
-                    TopBarIconButton(
-                        imageVector = TrashIcon,
-                        contentDescription = "Delete",
-                        onClick = {}
-                    )
+                    if (!isDeleteMode) {
+                        TopBarIconButton(
+                            imageVector = TrashIcon,
+                            contentDescription = "Delete",
+                            onClick = { isDeleteMode = true }
+                        )
+                    }
                 }
             )
         } else {
@@ -96,11 +100,13 @@ fun NotificationScreen(
                     )
                 },
                 actions = {
-                    TopBarIconButton(
-                        imageVector = TrashIcon,
-                        contentDescription = "Delete",
-                        onClick = onDeletePressed
-                    )
+                    if (!isDeleteMode) {
+                        TopBarIconButton(
+                            imageVector = TrashIcon,
+                            contentDescription = "Delete",
+                            onClick = { isDeleteMode = true }
+                        )
+                    }
                 }
             )
         }
@@ -151,7 +157,7 @@ fun NotificationScreen(
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        // 모두선택 / 읽음 처리 행
+        // 모두선택 / 읽음처리 또는 삭제 행
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -183,20 +189,68 @@ fun NotificationScreen(
                 )
             }
             Spacer(modifier = Modifier.weight(1f))
-            Text(
-                text = if (isInPreview) "읽음" else stringResource(id = com.hyunjung.core.presentation.ui.R.string.notification_read),
-                style = CherrydanTypography.Main4_R,
-                color = CherrydanColors.Black,
-                modifier = Modifier.clickable(enabled = hasAnySelected) {
-                    notificationItems = notificationItems.map { item ->
-                        if (item.isSelected) {
-                            item.copy(isRead = true, isSelected = false, hasHighPriority = false)
-                        } else {
-                            item
+
+            if (isDeleteMode) {
+                // 삭제 모드: "삭제 | 취소" 표시
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = if (isInPreview) "삭제" else stringResource(id = com.hyunjung.core.presentation.ui.R.string.notification_delete),
+                        style = CherrydanTypography.Main4_B.copy(fontSize = 14.sp),
+                        color = CherrydanColors.MainPink3,
+                        modifier = Modifier
+                            .clickable(enabled = hasAnySelected) {
+                                // 선택된 항목들을 삭제
+                                notificationItems = notificationItems.filter { !it.isSelected }
+                                isDeleteMode = false
+                                onDeletePressed()
+                            }
+                            .padding(end = 12.dp)
+                    )
+
+                    Text(
+                        text = "|",
+                        style = CherrydanTypography.Main5_R,
+                        color = CherrydanColors.Gray4
+                    )
+
+                    Text(
+                        text = if (isInPreview) "취소" else stringResource(id = com.hyunjung.core.presentation.ui.R.string.notification_cancel),
+                        style = CherrydanTypography.Main4_B.copy(fontSize = 14.sp),
+                        color = CherrydanColors.Black,
+                        modifier = Modifier
+                            .clickable {
+                                // 삭제 모드 취소 및 선택 해제
+                                notificationItems =
+                                    notificationItems.map { it.copy(isSelected = false) }
+                                isDeleteMode = false
+                            }
+                            .padding(start = 12.dp)
+                    )
+                }
+            } else {
+                // 일반 모드: "읽음" 표시
+                Text(
+                    text = if (isInPreview) "읽음" else stringResource(id = com.hyunjung.core.presentation.ui.R.string.notification_read),
+                    style = CherrydanTypography.Main4_R,
+                    color = if (hasAnySelected) CherrydanColors.Black else CherrydanColors.Gray4,
+                    modifier = Modifier.clickable(enabled = hasAnySelected) {
+                        // 선택된 항목들을 읽음 처리
+                        notificationItems = notificationItems.map { item ->
+                            if (item.isSelected) {
+                                item.copy(
+                                    isRead = true,
+                                    isSelected = false,
+                                    hasHighPriority = false
+                                )
+                            } else {
+                                item
+                            }
                         }
                     }
-                }
-            )
+                )
+            }
         }
 
         Spacer(modifier = Modifier.height(12.dp))
