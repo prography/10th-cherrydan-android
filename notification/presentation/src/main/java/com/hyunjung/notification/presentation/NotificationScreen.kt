@@ -54,7 +54,7 @@ import com.hyunjung.notification.presentation.component.NotificationToggleItem
 @Composable
 fun NotificationScreen(
     onBackPressed: () -> Unit = {},
-    onDeletePressed: () -> Unit = {}
+    onDeletePressed: (deletedItems: List<NotificationItemData>) -> Unit = {}
 ) {
     var selectedTabIndex by remember { mutableIntStateOf(0) }
     var notificationItems by remember { mutableStateOf(getSampleNotifications()) }
@@ -209,9 +209,10 @@ fun NotificationScreen(
                         modifier = Modifier
                             .clickable(enabled = hasAnySelected) {
                                 // 선택된 항목들을 삭제
+                                val itemsToDelete = notificationItems.filter { it.isSelected }
                                 notificationItems = notificationItems.filter { !it.isSelected }
                                 isDeleteMode = false
-                                onDeletePressed()
+                                onDeletePressed(itemsToDelete)
                             }
                             .padding(end = 12.dp)
                     )
