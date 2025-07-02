@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
@@ -137,7 +136,11 @@ fun TopBarIconButton(
     Box(
         modifier = modifier
             .size(CherrydanTopAppBarDefaults.ActionIconSize)
-            .clickable { onClick() },
+            .clickable(
+                enabled = true,
+                indication = null,
+                interactionSource = null
+            ) { onClick() },
         contentAlignment = Alignment.Center
     ) {
         Icon(
@@ -158,7 +161,11 @@ fun TopBarIconButton(
     Box(
         modifier = modifier
             .size(CherrydanTopAppBarDefaults.ActionIconSize)
-            .clickable { onClick() },
+            .clickable(
+                enabled = true,
+                indication = null,
+                interactionSource = null
+            ) { onClick() },
         contentAlignment = Alignment.Center
     ) {
         Icon(

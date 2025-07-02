@@ -2,6 +2,7 @@ package com.hyunjung.notification.presentation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -47,6 +48,7 @@ import com.hyunjung.core.presentation.designsystem.component.CherrydanFixedTabRo
 import com.hyunjung.core.presentation.designsystem.component.CherrydanTab
 import com.hyunjung.core.presentation.designsystem.component.CherrydanTopAppBar
 import com.hyunjung.core.presentation.designsystem.component.TopBarIconButton
+import com.hyunjung.core.presentation.ui.R
 import com.hyunjung.notification.presentation.component.AlertType
 import com.hyunjung.notification.presentation.component.NotificationActiveToggleItem
 import com.hyunjung.notification.presentation.component.NotificationToggleItem
@@ -98,7 +100,7 @@ fun NotificationScreen(
             )
         } else {
             CherrydanTopAppBar(
-                title = stringResource(id = com.hyunjung.core.presentation.ui.R.string.notification_title),
+                title = stringResource(id = R.string.notification_title),
                 navigationIcon = {
                     TopBarIconButton(
                         imageVector = BackIcon,
@@ -136,8 +138,8 @@ fun NotificationScreen(
                     listOf("활동", "맞춤형")
                 } else {
                     listOf(
-                        stringResource(com.hyunjung.core.presentation.ui.R.string.notification_activity),
-                        stringResource(com.hyunjung.core.presentation.ui.R.string.notification_keyword)
+                        stringResource(R.string.notification_activity),
+                        stringResource(R.string.notification_keyword)
                     )
                 }
 
@@ -174,7 +176,10 @@ fun NotificationScreen(
         ) {
             Row(
                 modifier = Modifier
-                    .clickable {
+                    .clickable(
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() }
+                    ) {
                         notificationItems = notificationItems.map { item ->
                             item.copy(isSelected = !allSelected)
                         }
@@ -190,7 +195,7 @@ fun NotificationScreen(
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
-                    text = if (isInPreview) "모두 선택" else stringResource(id = com.hyunjung.core.presentation.ui.R.string.notification_all_select),
+                    text = if (isInPreview) "모두 선택" else stringResource(id = R.string.notification_all_select),
                     style = CherrydanTypography.Main4_R,
                     color = CherrydanColors.Black
                 )
@@ -203,47 +208,57 @@ fun NotificationScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = if (isInPreview) "삭제" else stringResource(id = com.hyunjung.core.presentation.ui.R.string.notification_delete),
+                        text = if (isInPreview) "삭제" else stringResource(id = R.string.notification_delete),
                         style = CherrydanTypography.Main4_B.copy(fontSize = 14.sp),
                         color = CherrydanColors.MainPink3,
                         modifier = Modifier
-                            .clickable(enabled = hasAnySelected) {
+                            .clickable(
+                                indication = null,
+                                interactionSource = remember { MutableInteractionSource() },
+                                enabled = hasAnySelected
+                            ) {
                                 // 선택된 항목들을 삭제
                                 val itemsToDelete = notificationItems.filter { it.isSelected }
                                 notificationItems = notificationItems.filter { !it.isSelected }
                                 isDeleteMode = false
                                 onDeletePressed(itemsToDelete)
                             }
-                            .padding(end = 12.dp)
                     )
 
                     Text(
                         text = "|",
                         style = CherrydanTypography.Main5_R,
-                        color = CherrydanColors.Gray4
+                        color = CherrydanColors.Gray4,
+                        modifier = Modifier.padding(horizontal = 12.dp)
                     )
 
                     Text(
-                        text = if (isInPreview) "취소" else stringResource(id = com.hyunjung.core.presentation.ui.R.string.notification_cancel),
+                        text = if (isInPreview) "취소" else stringResource(id = R.string.notification_cancel),
                         style = CherrydanTypography.Main4_B.copy(fontSize = 14.sp),
                         color = CherrydanColors.Black,
                         modifier = Modifier
-                            .clickable {
+                            .clickable(
+                                indication = null,
+                                interactionSource = remember { MutableInteractionSource() }
+                            ) {
                                 // 삭제 모드 취소 및 선택 해제
                                 notificationItems =
                                     notificationItems.map { it.copy(isSelected = false) }
                                 isDeleteMode = false
                             }
-                            .padding(start = 12.dp)
                     )
                 }
             } else {
                 // 일반 모드: "읽음" 표시
                 Text(
-                    text = if (isInPreview) "읽음" else stringResource(id = com.hyunjung.core.presentation.ui.R.string.notification_read),
+                    text = if (isInPreview) "읽음" else stringResource(id = R.string.notification_read),
                     style = CherrydanTypography.Main4_R,
                     color = if (hasAnySelected) CherrydanColors.Black else CherrydanColors.Gray4,
-                    modifier = Modifier.clickable(enabled = hasAnySelected) {
+                    modifier = Modifier.clickable(
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() },
+                        enabled = hasAnySelected
+                    ) {
                         // 선택된 항목들을 읽음 처리
                         notificationItems = notificationItems.map { item ->
                             if (item.isSelected) {
