@@ -48,12 +48,12 @@
     <string name="search_toast_cannot_keyword_2">(마이페이지 > 내 정보 > 키워드 알림)에서 확인해 주세요.</string>
 
     <!-- My Page Screen -->
-    <string name="mypage_title">마이페이지</string>
-    <string name="mypage_greeting"> 체리님 안녕하세요</string>
-    <string name="mypage_version">버전 정보</string>
-    <string name="mypage_privacy_policy">개인정보 처리방침</string>
-    <string name="mypage_terms_and_conditions">이용약관</string>
-    <string name="mypage_management_policy">운영정책</string>
-    <string name="mypage_withdrawal">회원 탈퇴</string>
-    <string name="mypage_logout">로그아웃</string>
+    <string name="my_page_title">마이페이지</string>
+    <string name="my_page_greeting"> 체리님 안녕하세요</string>
+    <string name="my_page_version">버전 정보</string>
+    <string name="my_page_privacy_policy">개인정보 처리방침</string>
+    <string name="my_page_terms_and_conditions">이용약관</string>
+    <string name="my_page_management_policy">운영정책</string>
+    <string name="my_page_withdrawal">회원 탈퇴</string>
+    <string name="my_page_logout">로그아웃</string>
 </resources>
