@@ -91,7 +91,7 @@ fun MyPageScreen(modifier: Modifier = Modifier) {
             }
             item {
                 Text(
-                    text = "고객 센터",
+                    text = stringResource(R.string.my_page_customer_center),
                     style = CherrydanTypography.Main5_B,
                     color = CherrydanColors.MainPink2,
                     modifier = Modifier
@@ -101,22 +101,22 @@ fun MyPageScreen(modifier: Modifier = Modifier) {
             }
             item {
                 MyPageItemText(
-                    text = "공지 사항"
+                    text = stringResource(R.string.my_page_notice)
                 )
             }
             item {
                 MyPageItemText(
-                    text = "1:1 문의"
+                    text = stringResource(id = R.string.my_page_inquiry)
                 )
             }
             item {
                 MyPageItemText(
-                    text = "자주 묻는 질문"
+                    text = stringResource(id = R.string.my_page_faq)
                 )
             }
             item {
                 MyPageItemText(
-                    text = "이용 가이드"
+                    text = stringResource(id = R.string.my_page_guide)
                 )
             }
             item {
