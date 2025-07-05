@@ -3,16 +3,14 @@ package com.hyunjung.home.presentation.my_page
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -29,6 +27,9 @@ import com.hyunjung.core.presentation.designsystem.CherrydanTheme
 import com.hyunjung.core.presentation.designsystem.CherrydanTypography
 import com.hyunjung.core.presentation.designsystem.NotificationIcon
 import com.hyunjung.core.presentation.designsystem.SearchIcon
+import com.hyunjung.core.presentation.designsystem.component.CherrydanButtonShape
+import com.hyunjung.core.presentation.designsystem.component.CherrydanButtonSize
+import com.hyunjung.core.presentation.designsystem.component.CherrydanDefaultButton
 import com.hyunjung.core.presentation.designsystem.component.CherrydanTopAppBar
 import com.hyunjung.core.presentation.designsystem.component.TopBarIconButton
 import com.hyunjung.core.presentation.ui.R
@@ -168,42 +169,23 @@ fun MyPageScreen(modifier: Modifier = Modifier) {
                         .padding(16.dp),
                     horizontalArrangement = Arrangement.End
                 ) {
-                    Button(
+                    CherrydanDefaultButton(
+                        text = stringResource(id = R.string.my_page_withdrawal),
+                        onClick = { /* TODO: Handle withdrawal */ },
+                        modifier = Modifier
+                            .width(80.dp)
+                            .padding(end = 8.dp),
+                        shape = CherrydanButtonShape.ROUNDED_SMALL,
+                        size = CherrydanButtonSize.SMALL
+                    )
+                    CherrydanDefaultButton(
+                        text = stringResource(id = R.string.my_page_logout),
                         onClick = { /* TODO: Handle logout */ },
                         modifier = Modifier
-                            .padding(end = 8.dp),
-                        contentPadding = PaddingValues(horizontal = 18.dp, vertical = 9.dp),
-                        colors = ButtonColors(
-                            containerColor = CherrydanColors.Gray2,
-                            contentColor = CherrydanColors.Gray5,
-                            disabledContainerColor = CherrydanColors.Gray2,
-                            disabledContentColor = CherrydanColors.Gray5
-                        ),
-                        shape = RoundedCornerShape(2.dp)
-                    ) {
-                        Text(
-                            text = stringResource(id = R.string.my_page_withdrawal),
-                            style = CherrydanTypography.Main5_R,
-                            color = CherrydanColors.Gray5
-                        )
-                    }
-                    Button(
-                        onClick = { /* TODO: Handle logout */ },
-                        contentPadding = PaddingValues(horizontal = 18.dp, vertical = 9.dp),
-                        colors = ButtonColors(
-                            containerColor = CherrydanColors.Gray2,
-                            contentColor = CherrydanColors.Gray5,
-                            disabledContainerColor = CherrydanColors.Gray2,
-                            disabledContentColor = CherrydanColors.Gray5
-                        ),
-                        shape = RoundedCornerShape(2.dp)
-                    ) {
-                        Text(
-                            text = stringResource(id = R.string.my_page_logout),
-                            style = CherrydanTypography.Main5_R,
-                            color = CherrydanColors.Gray5
-                        )
-                    }
+                            .width(80.dp),
+                        shape = CherrydanButtonShape.ROUNDED_SMALL,
+                        size = CherrydanButtonSize.SMALL
+                    )
                 }
             }
         }
