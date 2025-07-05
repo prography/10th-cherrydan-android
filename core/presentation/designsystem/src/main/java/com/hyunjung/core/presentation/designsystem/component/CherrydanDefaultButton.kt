@@ -56,7 +56,7 @@ enum class CherrydanButtonShape(val cornerRadius: Dp) {
 
 enum class CherrydanButtonSize {
     SMALL,
-    BIG,
+    BIG
 }
 
 @Composable
@@ -77,7 +77,7 @@ fun CherrydanDefaultButton(
                     .height(36.dp)
                     .clip(RoundedCornerShape(shape.cornerRadius))
                     .background(if (enabled) style.containerColor else style.disabledContainerColor)
-                    .clickable { onClick() }
+                    .clickable(enabled = enabled, onClick = onClick)
             }
 
             CherrydanButtonSize.BIG -> {
@@ -85,7 +85,7 @@ fun CherrydanDefaultButton(
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(shape.cornerRadius))
                     .background(if (enabled) style.containerColor else style.disabledContainerColor)
-                    .clickable { onClick() }
+                    .clickable(enabled = enabled, onClick = onClick)
                     .padding(vertical = 15.dp)
             }
         },
