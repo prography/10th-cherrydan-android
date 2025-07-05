@@ -1,6 +1,7 @@
 package com.hyunjung.home.presentation.my_page
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -193,11 +194,15 @@ fun MyPageScreen(modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun MyPageItemText(text: String) {
+private fun MyPageItemText(
+    text: String,
+    onClick: (() -> Unit)? = null
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp),
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .run { if (onClick != null) clickable { onClick() } else this },
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
