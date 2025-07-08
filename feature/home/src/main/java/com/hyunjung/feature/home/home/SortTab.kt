@@ -1,4 +1,4 @@
-package com.hyunjung.home.presentation.home
+package com.hyunjung.feature.home.home
 
 enum class SortTab(val label: String) {
     Popular("인기순"),

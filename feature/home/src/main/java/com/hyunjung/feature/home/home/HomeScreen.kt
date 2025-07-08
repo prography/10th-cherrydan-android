@@ -48,7 +48,6 @@ import com.hyunjung.core.presentation.designsystem.component.CherrydanTabPositio
 import com.hyunjung.core.presentation.designsystem.component.CherrydanTopAppBar
 import com.hyunjung.core.presentation.designsystem.component.TopBarIconButton
 import com.hyunjung.core.presentation.ui.R
-import com.hyunjung.home.presentation.home.SortTab
 
 @Composable
 fun HomeScreenRoot(modifier: Modifier = Modifier) {
