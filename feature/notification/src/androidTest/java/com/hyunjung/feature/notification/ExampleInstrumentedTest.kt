@@ -1,4 +1,4 @@
-package com.hyunjung.core.data
+package com.hyunjung.feature.notification
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -19,6 +19,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.hyunjung.core.data", appContext.packageName)
+        assertEquals("com.hyunjung.feature.notification", appContext.packageName)
     }
 }

@@ -7,6 +7,7 @@ import com.android.build.api.dsl.LibraryExtension
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
+import java.util.Properties
 
 internal fun Project.configureBuildTypes(
     commonExtension: CommonExtension<*, *, *, *, *, *>,
@@ -18,29 +19,43 @@ internal fun Project.configureBuildTypes(
         }
 
         val apiKey = gradleLocalProperties(rootDir, providers).getProperty("API_KEY")
+
         when (extensionType) {
             ExtensionType.APPLICATION -> {
                 extensions.configure<ApplicationExtension> {
                     buildTypes {
                         debug {
-                            configureDebugBuildType(apiKey)
+                            configureDebugBuildType(
+                                this@configureBuildTypes,
+                                apiKey
+                            )
                         }
                         release {
-                            configureReleaseBuildType(commonExtension, apiKey)
+                            configureReleaseBuildType(
+                                this@configureBuildTypes,
+                                commonExtension,
+                                apiKey
+                            )
                         }
                     }
                 }
-
             }
 
             ExtensionType.LIBRARY -> {
                 extensions.configure<LibraryExtension> {
                     buildTypes {
                         debug {
-                            configureDebugBuildType(apiKey)
+                            configureDebugBuildType(
+                                this@configureBuildTypes,
+                                apiKey
+                            )
                         }
                         release {
-                            configureReleaseBuildType(commonExtension, apiKey)
+                            configureReleaseBuildType(
+                                this@configureBuildTypes,
+                                commonExtension,
+                                apiKey
+                            )
                         }
                     }
                 }
@@ -49,17 +64,40 @@ internal fun Project.configureBuildTypes(
     }
 }
 
-private fun BuildType.configureDebugBuildType(apiKey: String) {
+private fun Project.getBaseUrl(): String {
+    val localProperties = gradleLocalProperties(rootDir, providers)
+    val localBaseUrl = localProperties.getProperty("BASE_URL")
+    if (!localBaseUrl.isNullOrEmpty()) {
+        return localBaseUrl
+    }
+
+    val secretsPropertiesFile = rootProject.file("secrets.properties")
+    if (secretsPropertiesFile.exists()) {
+        val secretsProperties = Properties()
+        secretsProperties.load(secretsPropertiesFile.inputStream())
+        val secretsBaseUrl = secretsProperties.getProperty("BASE_URL")
+        if (!secretsBaseUrl.isNullOrEmpty()) {
+            return secretsBaseUrl
+        }
+    }
+
+    return "https://cherrydan.com"
+}
+
+private fun BuildType.configureDebugBuildType(project: Project, apiKey: String) {
     buildConfigField("String", "API_KEY", "\"$apiKey\"")
-    buildConfigField("String", "BASE_URL", "\"https://runique.pl-coding.com:8080\"")
+    val baseUrl = project.getBaseUrl()
+    buildConfigField("String", "BASE_URL", "\"$baseUrl\"")
 }
 
 private fun BuildType.configureReleaseBuildType(
+    project: Project,
     commonExtension: CommonExtension<*, *, *, *, *, *>,
     apiKey: String
 ) {
     buildConfigField("String", "API_KEY", "\"$apiKey\"")
-    buildConfigField("String", "BASE_URL", "\"https://runique.pl-coding.com:8080\"")
+    val baseUrl = project.getBaseUrl()
+    buildConfigField("String", "BASE_URL", "\"$baseUrl\"")
 
     isMinifyEnabled = false
     proguardFiles(

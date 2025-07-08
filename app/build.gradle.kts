@@ -63,11 +63,8 @@ dependencies {
     implementation(projects.core.data)
     implementation(projects.core.database)
 
-    implementation(projects.auth.presentation)
-    implementation(projects.auth.domain)
-    implementation(projects.auth.data)
-
-    implementation(projects.home.presentation)
-    implementation(projects.home.domain)
-    implementation(projects.home.data)
+    implementation(projects.feature.auth)
+    implementation(projects.feature.home)
+    implementation(projects.feature.notification)
+    implementation(projects.feature.search)
 }
