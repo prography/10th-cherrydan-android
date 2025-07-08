@@ -1,4 +1,4 @@
-package com.hyunjung.notification.presentation.component
+package com.hyunjung.feature.notification.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

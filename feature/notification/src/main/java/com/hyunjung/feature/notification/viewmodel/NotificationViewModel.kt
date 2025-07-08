@@ -1,4 +1,4 @@
-package com.hyunjung.notification.presentation.viewmodel
+package com.hyunjung.feature.notification.viewmodel
 
 import androidx.compose.ui.graphics.Color
 import com.hyunjung.core.presentation.designsystem.CherrydanColors

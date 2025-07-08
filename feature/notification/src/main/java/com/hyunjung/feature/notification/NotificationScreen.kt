@@ -1,4 +1,4 @@
-package com.hyunjung.notification.presentation
+package com.hyunjung.feature.notification
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -48,10 +48,9 @@ import com.hyunjung.core.presentation.designsystem.component.CherrydanFixedTabRo
 import com.hyunjung.core.presentation.designsystem.component.CherrydanTab
 import com.hyunjung.core.presentation.designsystem.component.CherrydanTopAppBar
 import com.hyunjung.core.presentation.designsystem.component.TopBarIconButton
-import com.hyunjung.core.presentation.ui.R
-import com.hyunjung.notification.presentation.component.AlertType
-import com.hyunjung.notification.presentation.component.NotificationActiveToggleItem
-import com.hyunjung.notification.presentation.component.NotificationToggleItem
+import com.hyunjung.feature.notification.component.AlertType
+import com.hyunjung.feature.notification.component.NotificationActiveToggleItem
+import com.hyunjung.feature.notification.component.NotificationToggleItem
 
 @Composable
 fun NotificationScreen(

@@ -1,7 +1,7 @@
-package com.hyunjung.notification.presentation.model
+package com.hyunjung.feature.notification.model
 
-import com.hyunjung.notification.presentation.viewmodel.NotificationItem
-import com.hyunjung.notification.presentation.viewmodel.NotificationTabType
+import com.hyunjung.feature.notification.viewmodel.NotificationItem
+import com.hyunjung.feature.notification.viewmodel.NotificationTabType
 
 data class NotificationUiState(
     val notifications: List<NotificationItem> = emptyList(),
