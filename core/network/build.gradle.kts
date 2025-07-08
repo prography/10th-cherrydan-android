@@ -8,6 +8,10 @@ android {
 }
 
 dependencies {
-    implementation(projects.core.domain)
-    implementation(projects.core.data)
+    implementation(projects.core.common)
+    implementation(projects.core.model)
+    implementation(libs.bundles.koin)
+    implementation(libs.timber)
+
+    implementation(libs.androidx.security.crypto.ktx)
 }

@@ -17,6 +17,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven { url = java.net.URI("https://devrepo.kakao.com/nexus/content/groups/public/") }
     }
 }
 
@@ -24,6 +25,7 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 rootProject.name = "Cherrydan"
 include(":app")
 include(":core")
+include(":core:common")
 include(":core:presentation:designsystem")
 include(":core:presentation:ui")
 include(":core:domain")
