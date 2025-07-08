@@ -7,7 +7,6 @@ import com.android.build.api.dsl.LibraryExtension
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
-import org.gradle.util.internal.DistributionLocator.getBaseUrl
 import java.util.Properties
 
 internal fun Project.configureBuildTypes(
@@ -26,24 +25,37 @@ internal fun Project.configureBuildTypes(
                 extensions.configure<ApplicationExtension> {
                     buildTypes {
                         debug {
-                            configureDebugBuildType(apiKey)
+                            configureDebugBuildType(
+                                this@configureBuildTypes,
+                                apiKey
+                            )
                         }
                         release {
-                            configureReleaseBuildType(commonExtension, apiKey)
+                            configureReleaseBuildType(
+                                this@configureBuildTypes,
+                                commonExtension,
+                                apiKey
+                            )
                         }
                     }
                 }
-
             }
 
             ExtensionType.LIBRARY -> {
                 extensions.configure<LibraryExtension> {
                     buildTypes {
                         debug {
-                            configureDebugBuildType(apiKey)
+                            configureDebugBuildType(
+                                this@configureBuildTypes,
+                                apiKey
+                            )
                         }
                         release {
-                            configureReleaseBuildType(commonExtension, apiKey)
+                            configureReleaseBuildType(
+                                this@configureBuildTypes,
+                                commonExtension,
+                                apiKey
+                            )
                         }
                     }
                 }
@@ -72,18 +84,19 @@ private fun Project.getBaseUrl(): String {
     return "https://cherrydan.com"
 }
 
-private fun BuildType.configureDebugBuildType(apiKey: String) {
+private fun BuildType.configureDebugBuildType(project: Project, apiKey: String) {
     buildConfigField("String", "API_KEY", "\"$apiKey\"")
-    val baseUrl = getBaseUrl()
+    val baseUrl = project.getBaseUrl()
     buildConfigField("String", "BASE_URL", "\"$baseUrl\"")
 }
 
 private fun BuildType.configureReleaseBuildType(
+    project: Project,
     commonExtension: CommonExtension<*, *, *, *, *, *>,
     apiKey: String
 ) {
     buildConfigField("String", "API_KEY", "\"$apiKey\"")
-    val baseUrl = getBaseUrl()
+    val baseUrl = project.getBaseUrl()
     buildConfigField("String", "BASE_URL", "\"$baseUrl\"")
 
     isMinifyEnabled = false
