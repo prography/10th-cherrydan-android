@@ -51,6 +51,7 @@ import com.hyunjung.core.presentation.designsystem.component.TopBarIconButton
 import com.hyunjung.feature.notification.component.AlertType
 import com.hyunjung.feature.notification.component.NotificationActiveToggleItem
 import com.hyunjung.feature.notification.component.NotificationToggleItem
+import com.hyunjung.core.presentation.ui.R
 
 @Composable
 fun NotificationScreen(

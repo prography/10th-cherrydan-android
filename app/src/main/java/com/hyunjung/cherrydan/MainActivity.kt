@@ -7,7 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.hyunjung.core.presentation.designsystem.CherrydanTheme
-import com.hyunjung.home.presentation.navigation.HomeNavigation
+import com.hyunjung.feature.home.navigation.HomeNavigation
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

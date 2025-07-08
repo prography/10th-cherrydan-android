@@ -66,4 +66,5 @@ dependencies {
     implementation(projects.feature.auth)
     implementation(projects.feature.home)
     implementation(projects.feature.notification)
+    implementation(projects.feature.search)
 }

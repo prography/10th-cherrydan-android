@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.hyunjung.feature.home"
+    namespace = "com.hyunjung.feature.search"
 }
 
 dependencies {
