@@ -23,6 +23,11 @@ jobs:
     - name: Create local.properties
       run: echo "API_KEY=ci_dummy_key" > local.properties
 
+    - name: Create secrets.properties
+      run: |
+        echo "BASE_URL=${{ secrets.BASE_URL }}" > secrets.properties
+        echo "KAKAO_NATIVE_APP_KEY=${{ secrets.KAKAO_NATIVE_APP_KEY }}" > secrets.properties
+
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     - name: Build with Gradle
