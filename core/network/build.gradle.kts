@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.hyunjung.cherrydan.android.library)
     alias(libs.plugins.hyunjung.cherrydan.jvm.ktor)
@@ -12,13 +14,10 @@ android {
     namespace = "com.hyunjung.cherrydan.core.network"
 
     defaultConfig {
-        buildConfigField(
-            "String",
-            "BASE_URL",
-            "\"https://cherrydan.com\""
-        )
-
-        val secretsFile = file("${rootProject.projectDir}/secrets.properties")
+        val secrets = Properties().apply {
+            load(file("${rootProject.projectDir}/secrets.properties").inputStream())
+        }
+        buildConfigField("String", "BASE_URL", "\"${secrets["BASE_URL"]}\"")
     }
 
     buildFeatures {

@@ -30,32 +30,27 @@ class AuthRemoteDataSourceImpl(
     private suspend fun loginWithKakao(
         accessToken: String,
         fcmToken: String?
-    ): Result<LoginResult, DataError> = client.post<AuthResource.Kakao.Login, LoginResponse>(
-        resource = AuthResource.Kakao.Login(),
-        body = SocialLoginRequestResponse(
-            accessToken = accessToken,
-            fcmToken = fcmToken,
-            deviceType = "android"
-        )
-    ).map { it.toDomain() }
+    ): Result<LoginResult, DataError> =
+        performSocialLogin(AuthResource.Kakao.Login(), accessToken, fcmToken)
 
     private suspend fun loginWithNaver(
         accessToken: String,
         fcmToken: String?
-    ): Result<LoginResult, DataError> = client.post<AuthResource.Naver.Login, LoginResponse>(
-        resource = AuthResource.Naver.Login(),
-        body = SocialLoginRequestResponse(
-            accessToken = accessToken,
-            fcmToken = fcmToken,
-            deviceType = "android"
-        )
-    ).map { it.toDomain() }
+    ): Result<LoginResult, DataError> =
+        performSocialLogin(AuthResource.Naver.Login(), accessToken, fcmToken)
 
     private suspend fun loginWithGoogle(
         accessToken: String,
         fcmToken: String?
-    ): Result<LoginResult, DataError> = client.post<AuthResource.Google.Login, LoginResponse>(
-        resource = AuthResource.Google.Login(),
+    ): Result<LoginResult, DataError> =
+        performSocialLogin(AuthResource.Google.Login(), accessToken, fcmToken)
+
+    private suspend inline fun <reified T : Any> performSocialLogin(
+        resource: T,
+        accessToken: String,
+        fcmToken: String?
+    ): Result<LoginResult, DataError> = client.post<T, LoginResponse>(
+        resource = resource,
         body = SocialLoginRequestResponse(
             accessToken = accessToken,
             fcmToken = fcmToken,

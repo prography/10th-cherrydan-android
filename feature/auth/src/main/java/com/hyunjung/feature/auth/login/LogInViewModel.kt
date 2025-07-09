@@ -24,10 +24,14 @@ class LogInViewModel(
 
     fun login(context: Context, socialType: SocialType) {
         viewModelScope.launch {
-            _uiState.update { LoginUiState.Loading }
-            when (val result = authRepository.login(context, socialType).first()) {
-                is Result.Success -> _uiState.update { LoginUiState.Success(result.data) }
-                is Result.Error -> _uiState.update { LoginUiState.Error(result.error) }
+            try {
+                _uiState.update { LoginUiState.Loading }
+                when (val result = authRepository.login(context, socialType).first()) {
+                    is Result.Success -> _uiState.update { LoginUiState.Success(result.data) }
+                    is Result.Error -> _uiState.update { LoginUiState.Error(result.error) }
+                }
+            } catch (e: Exception) {
+                _uiState.update { LoginUiState.Error(DataError.Network.UNKNOWN) }
             }
         }
     }

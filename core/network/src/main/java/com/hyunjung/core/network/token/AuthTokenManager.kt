@@ -3,7 +3,7 @@ package com.hyunjung.core.network.token
 import android.content.Context
 import androidx.core.content.edit
 import androidx.security.crypto.EncryptedSharedPreferences
-import androidx.security.crypto.MasterKeys
+import androidx.security.crypto.MasterKey
 
 class AuthTokenManager(private val context: Context) : TokenManager {
 
@@ -13,12 +13,14 @@ class AuthTokenManager(private val context: Context) : TokenManager {
         private const val REFRESH_TOKEN_KEY = "refresh_token"
     }
 
-    private val masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
+    private val masterKeyAlias = MasterKey.Builder(context)
+        .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+        .build()
 
     private val sharedPreferences = EncryptedSharedPreferences.create(
+        context,
         PREFS_NAME,
         masterKeyAlias,
-        context,
         EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
         EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
     )

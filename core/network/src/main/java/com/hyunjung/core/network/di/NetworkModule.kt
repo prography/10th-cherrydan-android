@@ -99,11 +99,10 @@ private fun provideHttpClient(
 
             // todo : 토큰 갱신 로직 수정 필요
             refreshTokens {
-                // 토큰 갱신 로직
                 val refreshToken = tokenManager.getRefreshToken()
                 if (refreshToken != null) {
                     try {
-                        val response = client.post("https://cherrydan.com/api/auth/refresh") {
+                        val response = client.post("/api/auth/refresh") {
                             contentType(ContentType.Application.Json)
                             setBody(mapOf("refreshToken" to refreshToken))
                         }

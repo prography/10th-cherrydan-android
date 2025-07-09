@@ -68,7 +68,7 @@ class KakaoAuthDataSource(
             }
 
             token != null -> {
-                Timber.d("카카오 로그인 성공: ${token.accessToken.take(5)}...")
+                Timber.d("카카오 로그인 성공")
                 val authTokens = AuthTokens(token.accessToken, token.refreshToken)
                 resumeIfActive(continuation, Result.Success(authTokens))
             }

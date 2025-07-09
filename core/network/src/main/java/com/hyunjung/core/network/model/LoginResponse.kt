@@ -12,6 +12,7 @@ data class LoginResponse(
     val result: LoginResultResponse
 )
 
+// TODO: Populate email, nickname, and profileImage when user profile API is added
 fun LoginResponse.toDomain(): LoginResult = LoginResult(
     user = User(
         userId = result.userId,

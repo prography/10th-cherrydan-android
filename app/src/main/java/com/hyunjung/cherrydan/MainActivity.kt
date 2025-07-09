@@ -28,23 +28,6 @@ import java.security.MessageDigest
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // 키 해시 확인용 (카카오 콘솔 등록 필수)
-        try {
-            val info = packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES)
-            for (signature in info.signatures!!) {
-                val md = MessageDigest.getInstance("SHA")
-                md.update(signature.toByteArray())
-                val keyHash = Base64.encodeToString(md.digest(), Base64.DEFAULT)
-                Log.d("KEY_HASH", "KeyHash: $keyHash")
-                Timber.d("카카오 키 해시: $keyHash")
-                Toast.makeText(this, "KeyHash: $keyHash", Toast.LENGTH_LONG).show()
-            }
-        } catch (e: Exception) {
-            Log.e("KEY_HASH", "Error", e)
-            Timber.e(e, "키 해시 생성 실패")
-        }
-
         enableEdgeToEdge()
         setContent {
             CherrydanTheme {
