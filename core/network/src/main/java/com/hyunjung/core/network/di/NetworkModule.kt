@@ -1,10 +1,11 @@
 package com.hyunjung.core.network.di
 
-import com.hyunjung.cherrydan.core.network.datasource.AuthRemoteDataSource
-import com.hyunjung.cherrydan.core.network.datasource.AuthRemoteDataSourceImpl
-import com.hyunjung.cherrydan.core.network.datasource.KakaoAuthDataSource
-import com.hyunjung.cherrydan.core.network.datasource.SocialAuthDataSource
-import com.hyunjung.cherrydan.core.network.model.TokenResponse
+import com.hyunjung.core.model.SocialType
+import com.hyunjung.core.network.datasource.AuthRemoteDataSource
+import com.hyunjung.core.network.datasource.AuthRemoteDataSourceImpl
+import com.hyunjung.core.network.datasource.KakaoAuthDataSource
+import com.hyunjung.core.network.datasource.SocialAuthDataSource
+import com.hyunjung.core.network.model.TokenResponse
 import com.hyunjung.core.network.token.AuthTokenManager
 import com.hyunjung.core.network.token.TokenManager
 import com.kakao.sdk.user.UserApiClient
@@ -27,7 +28,7 @@ import io.ktor.http.URLProtocol
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
-import org.koin.android.ext.koin.androidContext
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import timber.log.Timber
 
@@ -41,9 +42,20 @@ val networkModule = module {
     single<TokenManager> { AuthTokenManager(get()) }
     single<HttpClient> { provideHttpClient(get(), get()) }
     single<UserApiClient> { UserApiClient.instance }
-    single<SocialAuthDataSource> { KakaoAuthDataSource(get(), get(), androidContext()) }
-    single<AuthRemoteDataSource> { AuthRemoteDataSourceImpl(get()) }
 
+    single<SocialAuthDataSource>(named(SocialType.KAKAO.name)) {
+        KakaoAuthDataSource(get())
+    }
+
+    // single<SocialAuthDataSource>(named(SocialType.NAVER.name)) {
+    //     // NaverAuthDataSource는 아직 구현되지 않았습니다.
+    //     throw NotImplementedError("NaverAuthDataSource is not implemented yet.")
+    // }
+    single<AuthRemoteDataSource> { AuthRemoteDataSourceImpl(get()) }
+    // single<SocialAuthDataSource>(named(SocialType.GOOGLE.name)) {
+    //     // GoogleAuthDataSource는 아직 구현되지 않았습니다.
+    //     throw NotImplementedError("GoogleAuthDataSource is not implemented yet.")
+    // }
 }
 
 private fun provideHttpClient(

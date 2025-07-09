@@ -1,8 +1,8 @@
 package com.hyunjung.core.data.networking
 
+import com.hyunjung.core.common.util.DataError
+import com.hyunjung.core.common.util.Result
 import com.hyunjung.core.data.BuildConfig
-import com.hyunjung.core.domain.util.DataError
-import com.hyunjung.core.domain.util.Result
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.delete

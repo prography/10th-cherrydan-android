@@ -1,17 +1,45 @@
 plugins {
     alias(libs.plugins.hyunjung.cherrydan.android.library)
     alias(libs.plugins.hyunjung.cherrydan.jvm.ktor)
+    alias(libs.plugins.mapsplatform.secrets.plugin)
+}
+
+secrets {
+    defaultPropertiesFileName = "secrets.properties"
 }
 
 android {
-    namespace = "com.hyunjung.core.network"
+    namespace = "com.hyunjung.cherrydan.core.network"
+
+    defaultConfig {
+        buildConfigField(
+            "String",
+            "BASE_URL",
+            "\"https://cherrydan.com\""
+        )
+
+        val secretsFile = file("${rootProject.projectDir}/secrets.properties")
+    }
+
+    buildFeatures {
+        buildConfig = true
+    }
 }
 
 dependencies {
-    implementation(projects.core.common)
-    implementation(projects.core.model)
+    // Crypto
+    implementation(libs.androidx.security.crypto.ktx)
+
     implementation(libs.bundles.koin)
+
+    // Timber
     implementation(libs.timber)
 
-    implementation(libs.androidx.security.crypto.ktx)
+    implementation(projects.core.common)
+    implementation(projects.core.model)
+
+    // Kakao SDK
+    implementation(libs.kakao.auth)
+    implementation(libs.kakao.common)
+    implementation(libs.kakao.user)
 }

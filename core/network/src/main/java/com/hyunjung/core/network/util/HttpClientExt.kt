@@ -60,15 +60,15 @@ suspend inline fun <reified Response : Any> HttpClient.post(
     }
 }
 
-suspend inline fun <reified Response : Any> HttpClient.post(
-    resource: Any,
+suspend inline fun <reified Resource : Any, reified Response : Any> HttpClient.post(
+    resource: Resource,
     body: Any
 ): Result<Response, DataError.Network> {
     return safeCall {
         post(resource) {
             contentType(ContentType.Application.Json)
             setBody(body)
-        }
+        }.body()
     }
 }
 

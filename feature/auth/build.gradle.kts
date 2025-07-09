@@ -7,5 +7,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.timber)
+
     implementation(projects.core.domain)
 }

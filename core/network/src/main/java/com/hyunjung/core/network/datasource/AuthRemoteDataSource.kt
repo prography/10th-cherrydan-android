@@ -1,5 +1,7 @@
 package com.hyunjung.core.network.datasource
 
+import com.hyunjung.core.common.util.DataError
+import com.hyunjung.core.common.util.Result
 import com.hyunjung.core.model.LoginResult
 import com.hyunjung.core.model.SocialType
 

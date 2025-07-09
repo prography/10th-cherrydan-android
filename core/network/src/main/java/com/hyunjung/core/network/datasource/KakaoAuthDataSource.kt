@@ -1,19 +1,23 @@
 package com.hyunjung.core.network.datasource
 
 import android.content.Context
+import com.hyunjung.core.common.util.DataError
+import com.hyunjung.core.common.util.Result
 import com.hyunjung.core.model.AuthTokens
-import com.hyunjung.core.network.token.TokenManager
+import com.kakao.sdk.auth.model.OAuthToken
+import com.kakao.sdk.common.model.ClientError
+import com.kakao.sdk.common.model.ClientErrorCause
+import com.kakao.sdk.user.UserApiClient
 import kotlinx.coroutines.CancellableContinuation
 import kotlinx.coroutines.suspendCancellableCoroutine
 import timber.log.Timber
+import kotlin.coroutines.resume
 
 class KakaoAuthDataSource(
-    private val kakaoUserApiClient: UserApiClient,
-    private val tokenManager: TokenManager,
-    private val context: Context
+    private val kakaoUserApiClient: UserApiClient
 ) : SocialAuthDataSource {
 
-    override suspend fun login(): Result<AuthTokens, DataError> =
+    override suspend fun login(context: Context): Result<AuthTokens, DataError> =
         suspendCancellableCoroutine { continuation ->
             Timber.d("카카오 로그인 시작 - ${context::class.java.simpleName}")
 
@@ -65,7 +69,6 @@ class KakaoAuthDataSource(
 
             token != null -> {
                 Timber.d("카카오 로그인 성공: ${token.accessToken.take(5)}...")
-                tokenManager.saveTokens(token.accessToken, token.refreshToken)
                 val authTokens = AuthTokens(token.accessToken, token.refreshToken)
                 resumeIfActive(continuation, Result.Success(authTokens))
             }
