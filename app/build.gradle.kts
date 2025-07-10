@@ -1,7 +1,13 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.hyunjung.cherrydan.android.application.compose)
     alias(libs.plugins.hyunjung.cherrydan.jvm.ktor)
     alias(libs.plugins.mapsplatform.secrets.plugin)
+}
+
+secrets {
+    defaultPropertiesFileName = "secrets.properties"
 }
 
 android {
@@ -9,6 +15,28 @@ android {
 
     defaultConfig {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField(
+            "String",
+            "BASE_URL",
+            "\"https://cherrydan.com\""
+        )
+
+        val secretsFile = file("${rootProject.projectDir}/secrets.properties")
+        val kakaoKey = if (secretsFile.exists()) {
+            val properties = Properties()
+            properties.load(secretsFile.inputStream())
+            properties.getProperty("KAKAO_NATIVE_APP_KEY", "")
+        } else {
+            ""
+        }
+
+        manifestPlaceholders["kakaoScheme"] = "kakao$kakaoKey"
+        manifestPlaceholders["kakaoKey"] = kakaoKey
+    }
+
+    buildFeatures {
+        buildConfig = true
     }
 }
 
@@ -57,14 +85,21 @@ dependencies {
     api(libs.play.feature.delivery)
     api(libs.play.review)
 
+    implementation(projects.feature.auth)
+    implementation(projects.feature.home)
+    implementation(projects.feature.notification)
+    implementation(projects.feature.search)
+
     implementation(projects.core.presentation.designsystem)
     implementation(projects.core.presentation.ui)
     implementation(projects.core.domain)
     implementation(projects.core.data)
     implementation(projects.core.database)
+    implementation(projects.core.network)
+    implementation(projects.core.common)
 
-    implementation(projects.feature.auth)
-    implementation(projects.feature.home)
-    implementation(projects.feature.notification)
-    implementation(projects.feature.search)
+    // Kakao SDK
+    implementation(libs.kakao.auth)
+    implementation(libs.kakao.common)
+    implementation(libs.kakao.user)
 }

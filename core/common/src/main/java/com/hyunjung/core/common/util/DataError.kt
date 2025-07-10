@@ -1,4 +1,4 @@
-package com.hyunjung.core.domain.util
+package com.hyunjung.core.common.util
 
 sealed interface DataError : Error {
     enum class Network : DataError {

@@ -1,6 +1,6 @@
 package com.hyunjung.core.presentation.ui
 
-import com.hyunjung.core.domain.util.DataError
+import com.hyunjung.core.common.util.DataError
 
 fun DataError.asUiText(): UiText {
     return when (this) {

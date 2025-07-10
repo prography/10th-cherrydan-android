@@ -1,8 +1,10 @@
-package com.hyunjung.core.domain.util
+package com.hyunjung.core.common.util
+
 
 sealed interface Result<out D, out E : Error> {
     data class Success<out D>(val data: D) : Result<D, Nothing>
-    data class Error<out E : com.hyunjung.core.domain.util.Error>(val error: E) : Result<Nothing, E>
+    data class Error<out E : com.hyunjung.core.common.util.Error>(val error: E) :
+        Result<Nothing, E>
 }
 
 inline fun <T, E : Error, R> Result<T, E>.map(map: (T) -> R): Result<R, E> {
@@ -17,3 +19,8 @@ fun <T, E : Error> Result<T, E>.asEmptyDataResult(): EmptyDataResult<E> {
 }
 
 typealias EmptyDataResult<E> = Result<Unit, E>
+
+inline fun <T, E : Error> Result<T, E>.onSuccess(action: (T) -> Unit): Result<T, E> {
+    if (this is Result.Success) action(data)
+    return this
+}
